@@ -111,5 +111,5 @@ function generate() {
         }
     });
 
-    window.alert(selected[Math.floor(Math.random() * selected.length)]);
+    window.alert("You rolled " + selected[Math.floor(Math.random() * selected.length)] + "!");
 }
