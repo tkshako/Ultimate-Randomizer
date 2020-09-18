@@ -1,0 +1,27 @@
+.char {
+    background-color: lightgray;
+    display: inline-block;
+    margin: 1px;
+    border: solid;
+    width: 12rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+    text-align: center;
+}
+
+.selected {
+    background-color: lightgreen;
+}
+
+.unselected {
+    background-color: lightcoral;
+}
+
+.checkbox {
+    display: none;
+}
+
+label {
+    pointer-events: none;
+}
