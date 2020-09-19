@@ -1,7 +1,7 @@
 const chars = [];
 for (let i = 0; i < charNames.length; i++) {
     chars.push({
-        id: charCodes[i],
+        code: charCodes[i],
         name: charNames[i],
     });
 }
@@ -12,8 +12,8 @@ $(function() {
     for (char of chars) {
         html += `
             <span class="char">
-                <input type="checkbox" id="${char.id}" name="${char.name}" value="${char.id}" class="checkbox">
-                <label for="${char.id}">${char.name}</label>
+                <input type="checkbox" id="${char.code}" name="${char.name}" value="${char.code}" class="checkbox">
+                <label for="${char.code}">${char.name}</label>
             </span>
         `;
     }
@@ -36,7 +36,11 @@ $(function() {
     $('input[type=checkbox]').click(toggleColor);
     $('input[type=checkbox]').parent().click(toggle);
 
-    selectAll();
+    if (document.cookie) {
+        applyCookie();
+    } else {
+        selectAll();
+    }
 });
 
 function selectAll() {
@@ -44,6 +48,8 @@ function selectAll() {
         $(this).prop('checked', true);
         toggleColor(this.id);
     });
+
+    setCookie();
 }
 
 function deselectAll() {
@@ -51,14 +57,20 @@ function deselectAll() {
         $(this).prop('checked', false);
         toggleColor(this.id);
     });
+
+    setCookie();
 }
 
 function applyPreset(preset) {
-    let chars = preset.data.preset;
+    let chars;
+    if (preset.data) {
+        chars = preset.data.preset;
+    } else {
+        chars = preset;
+    }
 
     $('input[type=checkbox]').each(function() {
         let checkbox = $(this);
-
         if (chars.includes(checkbox.val())) {
             checkbox.prop('checked', true);
         } else {
@@ -67,6 +79,8 @@ function applyPreset(preset) {
         
         toggleColor(this.id);
     });
+
+    setCookie();
 }
 
 function toggle() {
@@ -82,6 +96,8 @@ function toggle() {
         span.addClass('selected');
         span.removeClass('unselected')
     }
+
+    setCookie();
 }
 
 function toggleColor(id) {
@@ -112,4 +128,29 @@ function generate() {
     });
 
     window.alert("You rolled " + selected[Math.floor(Math.random() * selected.length)] + "!");
+}
+
+function arrayToString(arr) {
+    result = '';
+    for (char of arr) {
+        result += char;
+        result += ',';
+    }
+    return result.slice(0, -1);
+}
+
+function setCookie() {
+    let selected = [];
+    $('input[type=checkbox]').each(function() {
+        if ($(this).prop('checked')) {
+            selected.push(this.id);
+        }
+    });
+
+    document.cookie = 'charset=' + arrayToString(selected) + '; expires Thu, 31 Dec 2099 23:99:99 UTC';
+}
+
+function applyCookie() {
+    let chars = document.cookie.split('=')[1];
+    applyPreset(chars.split(','));
 }

@@ -80,6 +80,7 @@ const charNames = [
     'Mii Brawler',
     'Mii Swordfighter',
     'Mii Gunner',
+    'Random',
 ];
 
 const charCodes = [
@@ -164,6 +165,7 @@ const charCodes = [
     'miibrawler',
     'miiswordfighter',
     'miigunner',
+    'random',
 ];
 
 const preset64 = [
