@@ -147,7 +147,7 @@ function setCookie() {
         }
     });
 
-    document.cookie = 'charset=' + arrayToString(selected) + '; expires Thu, 31 Dec 2099 23:99:99 UTC';
+    document.cookie = 'charset=' + arrayToString(selected) + '; expires=Thu, 31 Dec 2099 23:99:99 UTC';
 }
 
 function applyCookie() {
