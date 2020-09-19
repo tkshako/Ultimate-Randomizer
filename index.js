@@ -127,7 +127,7 @@ function generate() {
         }
     });
 
-    window.alert("You rolled " + selected[Math.floor(Math.random() * selected.length)] + "!");
+    $('#results').text('You rolled ' + selected[Math.floor(Math.random() * selected.length)] + '!');
 }
 
 function arrayToString(arr) {
