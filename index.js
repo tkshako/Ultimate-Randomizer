@@ -141,10 +141,9 @@ function arrayToString(arr) {
 
 function generateLink() {
     let selected = getSelectedChars();
+    let hash = btoa(selected);
 
-    let shortLink = CryptoJS.AES.encrypt(selected);
-    console.log(selected);
-    console.log(shortLink);
+    console.log(window.location);
 }
 
 function applyHash() {
