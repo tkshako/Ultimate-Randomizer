@@ -140,6 +140,8 @@ function arrayToString(arr) {
 }
 
 function setCookie() {
+    console.log('test');
+
     let selected = [];
     $('input[type=checkbox]').each(function() {
         if ($(this).prop('checked')) {
