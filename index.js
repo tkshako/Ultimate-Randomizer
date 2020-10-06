@@ -68,6 +68,8 @@ function applyPreset(preset) {
         chars = preset;
     }
 
+    chars = chars.split(',');
+
     $('input[type=checkbox]').each(function() {
         let checkbox = $(this);
         if (chars.includes(checkbox.val())) {
@@ -114,19 +116,14 @@ function toggleColor(id) {
     }
 }
 
-function getSelectedChars() {
+function generate() {
     let selected = [];
     $('input[type=checkbox]').each(function() {
         if ($(this).prop('checked')) {
-            selected.push(this.id);
+            selected.push(this.name);
         }
     });
 
-    return selected
-}
-
-function generate() {
-    let selected = getSelectedChars();
     $('#results').text('You rolled ' + selected[Math.floor(Math.random() * selected.length)] + '!');
 }
 
@@ -140,7 +137,13 @@ function arrayToString(arr) {
 }
 
 function generateLink() {
-    let selected = getSelectedChars();
+    let selected = [];
+    $('input[type=checkbox]').each(function() {
+        if ($(this).prop('checked')) {
+            selected.push(this.id);
+        }
+    });
+
     let hash = btoa(selected);
     
     let path = window.location.pathname.split('/');
