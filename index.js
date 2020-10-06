@@ -149,5 +149,7 @@ function generateLink() {
 
 function applyHash(hash) {
     selected = atob(hash);
+    console.log(hash);
+    console.log(selected);
     applyPreset(selected);
 }
