@@ -61,14 +61,7 @@ function deselectAll() {
     });
 }
 
-function applyPreset(preset) {
-    let chars;
-    if (preset.data) {
-        chars = preset.data.preset.split('/');
-    } else {
-        chars = preset;
-    }
-
+function applyPreset(chars) {
     $('input[type=checkbox]').each(function() {
         let checkbox = $(this);
         if (chars.includes(checkbox.val())) {
@@ -164,5 +157,5 @@ function generateLink() {
 
 function applyHash(hash) {
     selected = atob(hash);
-    applyPreset(selected);
+    applyPreset(selected).split(',');
 }
