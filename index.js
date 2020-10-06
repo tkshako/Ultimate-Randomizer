@@ -7,8 +7,6 @@ for (let i = 0; i < charNames.length; i++) {
 }
 
 $(function() {
-    console.log(window.location)
-
     let html = '';
 
     for (char of chars) {
@@ -27,6 +25,8 @@ $(function() {
     $('#select').click(selectAll);
     $('#deselect').click(deselectAll);
 
+    $('#link').click(generateLink);
+
     $('#preset64').click({preset: preset64}, applyPreset);
     $('#presetMelee').click({preset: presetMelee}, applyPreset);
     $('#presetBrawl').click({preset: presetBrawl}, applyPreset);
@@ -38,8 +38,9 @@ $(function() {
     $('input[type=checkbox]').click(toggleColor);
     $('input[type=checkbox]').parent().click(toggle);
 
-    if (document.cookie) {
-        applyCookie();
+    let path = window.location.pathname.split('/');
+    if (path.length == 3 && path[2].length > 0) {
+        applyHash();
     } else {
         selectAll();
     }
@@ -50,8 +51,6 @@ function selectAll() {
         $(this).prop('checked', true);
         toggleColor(this.id);
     });
-
-    setCookie();
 }
 
 function deselectAll() {
@@ -59,8 +58,6 @@ function deselectAll() {
         $(this).prop('checked', false);
         toggleColor(this.id);
     });
-
-    setCookie();
 }
 
 function applyPreset(preset) {
@@ -81,8 +78,6 @@ function applyPreset(preset) {
         
         toggleColor(this.id);
     });
-
-    setCookie();
 }
 
 function toggle() {
@@ -98,8 +93,6 @@ function toggle() {
         span.addClass('selected');
         span.removeClass('unselected')
     }
-
-    setCookie();
 }
 
 function toggleColor(id) {
@@ -121,14 +114,19 @@ function toggleColor(id) {
     }
 }
 
-function generate() {
+function getSelectedChars() {
     let selected = [];
     $('input[type=checkbox]').each(function() {
         if ($(this).prop('checked')) {
-            selected.push(this.name);
+            selected.push(this.id);
         }
     });
 
+    return selected
+}
+
+function generate() {
+    let selected = getSelectedChars();
     $('#results').text('You rolled ' + selected[Math.floor(Math.random() * selected.length)] + '!');
 }
 
@@ -141,20 +139,19 @@ function arrayToString(arr) {
     return result.slice(0, -1);
 }
 
-function setCookie() {
-    console.log('test');
+function generateLink() {
+    let selected = getSelectedChars();
 
+    let shortLink = CryptoJS.AES.encrypt(selected);
+    console.log(selected);
+    console.log(shortLink);
+}
+
+function applyHash() {
     let selected = [];
     $('input[type=checkbox]').each(function() {
         if ($(this).prop('checked')) {
             selected.push(this.id);
         }
     });
-
-    document.cookie = 'charset=' + arrayToString(selected) + '; expires=Thu, 31 Dec 2099 23:99:99 UTC; secure';
-}
-
-function applyCookie() {
-    let chars = document.cookie.split('=')[1];
-    applyPreset(chars.split(','));
 }
