@@ -39,8 +39,8 @@ $(function() {
     $('input[type=checkbox]').parent().click(toggle);
 
     let path = window.location.pathname.split('/');
-    if (path.length == 3 && path[2].length > 0) {
-        applyHash();
+    if (path[2].length > 0) {
+        applyHash(path[2]);
     } else {
         selectAll();
     }
@@ -142,15 +142,12 @@ function arrayToString(arr) {
 function generateLink() {
     let selected = getSelectedChars();
     let hash = btoa(selected);
-
-    console.log(window.location);
+    
+    let path = window.location.pathname.split('/');
+    window.alert(window.location.origin + "/" + path[1] + "/" + hash);
 }
 
-function applyHash() {
-    let selected = [];
-    $('input[type=checkbox]').each(function() {
-        if ($(this).prop('checked')) {
-            selected.push(this.id);
-        }
-    });
+function applyHash(hash) {
+    selected = atob(hash);
+    applyPreset(selected);
 }
