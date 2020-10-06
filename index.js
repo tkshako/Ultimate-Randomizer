@@ -27,13 +27,13 @@ $(function() {
 
     $('#generateLink').click(generateLink);
 
-    $('#preset64').click({preset: preset64}, applyPreset);
-    $('#presetMelee').click({preset: presetMelee}, applyPreset);
-    $('#presetBrawl').click({preset: presetBrawl}, applyPreset);
-    $('#preset4').click({preset: preset4}, applyPreset);
-    $('#presetWeeb').click({preset: presetWeebs}, applyPreset);
-    $('#presetHeavy').click({preset: presetHeavies}, applyPreset);
-    $('#presetHell').click({preset: presetSpammers}, applyPreset);
+    $('#preset64').click({chars: preset64}, applyPreset);
+    $('#presetMelee').click({chars: presetMelee}, applyPreset);
+    $('#presetBrawl').click({chars: presetBrawl}, applyPreset);
+    $('#preset4').click({chars: preset4}, applyPreset);
+    $('#presetWeeb').click({chars: presetWeebs}, applyPreset);
+    $('#presetHeavy').click({chars: presetHeavies}, applyPreset);
+    $('#presetHell').click({chars: presetSpammers}, applyPreset);
     $('#presetRandom').click(applyRandom);
 
     $('input[type=checkbox]').click(toggleColor);
