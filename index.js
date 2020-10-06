@@ -34,6 +34,7 @@ $(function() {
     $('#presetWeeb').click({preset: presetWeebs}, applyPreset);
     $('#presetHeavy').click({preset: presetHeavies}, applyPreset);
     $('#presetHell').click({preset: presetSpammers}, applyPreset);
+    $('#presetRandom').click(applyRandom);
 
     $('input[type=checkbox]').click(toggleColor);
     $('input[type=checkbox]').parent().click(toggle);
@@ -63,16 +64,27 @@ function deselectAll() {
 function applyPreset(preset) {
     let chars;
     if (preset.data) {
-        chars = preset.data.preset;
+        chars = preset.data.preset.split('/');
     } else {
         chars = preset;
     }
 
-    chars = chars.split(',');
-
     $('input[type=checkbox]').each(function() {
         let checkbox = $(this);
         if (chars.includes(checkbox.val())) {
+            checkbox.prop('checked', true);
+        } else {
+            checkbox.prop('checked', false);
+        }
+        
+        toggleColor(this.id);
+    });
+}
+
+function applyRandom() {
+    $('input[type=checkbox]').each(function() {
+        let checkbox = $(this);
+        if (Math.random() < 0.5) {
             checkbox.prop('checked', true);
         } else {
             checkbox.prop('checked', false);
@@ -152,7 +164,5 @@ function generateLink() {
 
 function applyHash(hash) {
     selected = atob(hash);
-    console.log(hash);
-    console.log(selected);
     applyPreset(selected);
 }
