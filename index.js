@@ -25,7 +25,7 @@ $(function() {
     $('#select').click(selectAll);
     $('#deselect').click(deselectAll);
 
-    $('#link').click(generateLink);
+    $('#generateLink').click(generateLink);
 
     $('#preset64').click({preset: preset64}, applyPreset);
     $('#presetMelee').click({preset: presetMelee}, applyPreset);
