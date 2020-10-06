@@ -7,6 +7,8 @@ for (let i = 0; i < charNames.length; i++) {
 }
 
 $(function() {
+    console.log(window.location)
+
     let html = '';
 
     for (char of chars) {
