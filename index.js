@@ -157,5 +157,5 @@ function generateLink() {
 
 function applyHash(hash) {
     selected = atob(hash);
-    applyPreset(selected).split(',');
+    applyPreset(selected.split(','));
 }
