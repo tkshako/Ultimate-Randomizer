@@ -160,7 +160,7 @@ function toBase64(n) {
     } else if (n === 62) {
         return '+';
     } else {
-        return '/';
+        return '-';
     }
 }
 
