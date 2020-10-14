@@ -1,19 +1,12 @@
-const chars = [];
-for (let i = 0; i < charNames.length; i++) {
-    chars.push({
-        code: charCodes[i],
-        name: charNames[i],
-    });
-}
-
 $(function() {
     let html = '';
 
-    for (char of chars) {
+    for (let i = 0; i < charNames.length; i++) {
+        let char = charNames[i];
         html += `
             <span class="char">
-                <input type="checkbox" id="${char.code}" name="${char.name}" value="${char.code}" class="checkbox">
-                <label for="${char.code}">${char.name}</label>
+                <input type="checkbox" id="char${i}" name="${char}" value="${char}" class="checkbox">
+                <label for="char${i}">${char}</label>
             </span>
         `;
     }
@@ -27,62 +20,35 @@ $(function() {
 
     $('#generateLink').click(generateLink);
 
-    $('#preset64').click({preset: preset64}, applyPreset);
-    $('#presetMelee').click({preset: presetMelee}, applyPreset);
-    $('#presetBrawl').click({preset: presetBrawl}, applyPreset);
-    $('#preset4').click({preset: preset4}, applyPreset);
-    $('#presetWeeb').click({preset: presetWeebs}, applyPreset);
-    $('#presetHeavy').click({preset: presetHeavies}, applyPreset);
-    $('#presetHell').click({preset: presetSpammers}, applyPreset);
     $('#presetRandom').click(applyRandom);
 
-    $('input[type=checkbox]').click(toggleColor);
-    $('input[type=checkbox]').parent().click(toggle);
+    $('.checkbox').click(toggleColor);
+    $('.checkbox').parent().click(toggle);
 
     let path = window.location.pathname.split('/');
     if (path[2].length > 0) {
-        applyHash(path[2]);
+        applyLink(path[2]);
     } else {
         selectAll();
     }
 });
 
 function selectAll() {
-    $('input[type=checkbox]').each(function() {
+    $('.checkbox').each(function() {
         $(this).prop('checked', true);
         toggleColor(this.id);
     });
 }
 
 function deselectAll() {
-    $('input[type=checkbox]').each(function() {
+    $('.checkbox').each(function() {
         $(this).prop('checked', false);
         toggleColor(this.id);
     });
 }
 
-function applyPreset(preset) {
-    let chars;
-    if (preset.data) {
-        chars = preset.data.preset;
-    } else {
-        chars = preset;
-    }
-
-    $('input[type=checkbox]').each(function() {
-        let checkbox = $(this);
-        if (chars.includes(checkbox.val())) {
-            checkbox.prop('checked', true);
-        } else {
-            checkbox.prop('checked', false);
-        }
-        
-        toggleColor(this.id);
-    });
-}
-
 function applyRandom() {
-    $('input[type=checkbox]').each(function() {
+    $('.checkbox').each(function() {
         let checkbox = $(this);
         if (Math.random() < 0.5) {
             checkbox.prop('checked', true);
@@ -130,7 +96,7 @@ function toggleColor(id) {
 
 function generate() {
     let selected = [];
-    $('input[type=checkbox]').each(function() {
+    $('.checkbox').each(function() {
         if ($(this).prop('checked')) {
             selected.push(this.name);
         }
@@ -139,30 +105,76 @@ function generate() {
     $('#results').text('You rolled ' + selected[Math.floor(Math.random() * selected.length)] + '!');
 }
 
-function arrayToString(arr) {
-    result = '';
-    for (char of arr) {
-        result += char;
-        result += ',';
-    }
-    return result.slice(0, -1);
-}
-
 function generateLink() {
-    let selected = [];
-    $('input[type=checkbox]').each(function() {
+    let cur64 = 0;
+    let base64String = '';
+
+    $('.checkbox').each(function(i) {
         if ($(this).prop('checked')) {
-            selected.push(this.id);
+            cur64 += Math.pow(2, i % 6);
+        }
+
+        if (i % 6 == 5) {
+            base64String += toBase64(cur64);
+            cur64 = 0;
         }
     });
 
-    let hash = btoa(selected);
+    base64String += toBase64(cur64);
     
     let path = window.location.pathname.split('/');
-    window.alert(window.location.origin + "/" + path[1] + "/" + hash);
+    window.alert(window.location.origin + "/" + path[1] + "/" + base64String);
 }
 
-function applyHash(hash) {
-    selected = atob(hash);
-    applyPreset(selected.split(','));
+function applyLink(encoding) {
+    let charArray = [];
+
+    for (let i = 0; i < encoding.length; i++) {
+        let cur64 = fromBase64(encoding[i]);
+
+        for (let j = 0; j < 6; j++) {
+            charArray[6 * i + j] = cur64 % 2 === 1;
+            cur64 = Math.floor(cur64 / 2);
+        }
+    }
+
+    $('.checkbox').each(function(i) {
+        let checkbox = $(this);
+        if (charArray[i]) {
+            checkbox.prop('checked', true);
+        } else {
+            checkbox.prop('checked', false);
+        }
+        
+        toggleColor(this.id);
+    });
+}
+
+function toBase64(n) {
+    if (n <= 25) {
+        return String.fromCharCode(65 + n);
+    } else if (n <= 51) {
+        return String.fromCharCode(97 + n - 26);
+    } else if (n <= 61) {
+        return String.fromCharCode(48 + n - 52);
+    } else if (n === 62) {
+        return '+';
+    } else {
+        return '/';
+    }
+}
+
+function fromBase64(s) {
+    let code = s.charCodeAt(0);
+    if (code >= 65 && code <= 90) {
+        return code - 65;
+    } else if (code >= 97 && code <= 122) {
+        return code - 97 + 26;
+    } else if (code >= 48 && code <= 57) {
+        return code - 48 + 52;
+    } else if (code === 43) {
+        return 62;
+    } else {
+        return 63;
+    }
 }
