@@ -80,6 +80,8 @@ const charNames = [
     'Steve',
     'Sephiroth',
     'Pyra / Mythra',
+    'Kazuya',
+    'Sora',
     'Mii Brawler',
     'Mii Swordfighter',
     'Mii Gunner',
